@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Update Notifications</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    #updates { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Book Update Notifications</h1>
+  <div id="updates"></div>
+
+  <script>
+    // Connect to the WebSocket server on the new port
+    const ws = new WebSocket('ws://localhost:8084'); // Use the new port
+  
+    // Handle incoming messages
+    ws.onmessage = (event) => {
+      const update = JSON.parse(event.data);
+      const updatesDiv = document.getElementById('updates');
+      
+      // Display the update
+      const updateElement = document.createElement('div');
+      updateElement.textContent = `Book ID: ${update.book.id}, Price: ${update.book.price}, Stock: ${update.book.stock}`;
+      updatesDiv.appendChild(updateElement);
+    };
+    
+    // Handle WebSocket errors
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+    
+    // Handle WebSocket close
+    ws.onclose = () => {
+      console.log('WebSocket connection closed');
+    };
+  </script>
+  
+</body>
+</html>
